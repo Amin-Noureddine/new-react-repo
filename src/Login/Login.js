@@ -2,6 +2,19 @@ import React from 'react';
 import './Login.css'; // Import your CSS file
 
 function Login() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    if (!password) {
+      alert('Password cannot be empty');
+      return;
+    }
+
+    // Continue with the form submission logic here
+  };
+
   return (
     <div className="container">
       <div className="login-grid">
@@ -18,7 +31,7 @@ function Login() {
         </div>
         <br />
         <div className="login-form">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
