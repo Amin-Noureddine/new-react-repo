@@ -1,60 +1,92 @@
-import React, { useState } from "react";
-import "./Sign_Up.css"; // Import your CSS file
+import React, { useState } from 'react';
+import './Sign_Up.css'; // Import your CSS file
 
 function Sign_Up() {
-  const [name, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [phoneError, setPhoneError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation: Check if the name is at least 4 characters
     if (name.length < 4) {
-      setNameError("Name should be at least 4 characters");
+      setNameError('Name should be at least 4 characters');
       return;
     } else {
-      setNameError("");
+      setNameError('');
+    }
+
+    // Validation: Check if the email is valid
+    if (!validateEmail(email)) {
+      setEmailError('Invalid email format');
+      return;
+    } else {
+      setEmailError('');
     }
 
     // Validation: Check if the phone number has exactly 10 digits
     const phoneNumberPattern = /^\d{10}$/;
     if (!phoneNumberPattern.test(phoneNumber)) {
-      setPhoneError("Phone number must have exactly 10 digits");
+      setPhoneError('Phone number must have exactly 10 digits');
       return;
     } else {
-      setPhoneError("");
+      setPhoneError('');
     }
 
     // Validation: Check if the password has at least 8 characters
     if (password.length < 8) {
-      setPasswordError("Password must be at least 8 characters");
+      setPasswordError('Password must be at least 8 characters');
       return;
     } else {
-      setPasswordError("");
+      setPasswordError('');
     }
 
     // If all validations are successful, you can proceed with form submission
-    // Add your form submission logic here
+    // Make a POST request to the registration endpoint
+    try {
+      const response = await fetch('https://amynalqrby4-8181.theiadockernext-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          phone: phoneNumber,
+          password: password,
+        }),
+      });
+
+      if (response.ok) {
+        // Registration successful
+        setRegistrationSuccess(true);
+      } else {
+        // Registration failed, handle errors
+        console.error('Registration failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  // Function to validate email format
+  const validateEmail = (email) => {
+    const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    return emailPattern.test(email);
   };
 
   return (
-    <div className="container" style={{ marginTop: "5%" }}>
+    <div className="container" style={{ marginTop: '5%' }}>
       <div className="signup-grid">
         <div className="signup-text">
           <h1>Sign Up</h1>
-        </div>
-        <div className="signup-text1" style={{ textAlign: "left" }}>
-          Already a member?{" "}
-          <span>
-            <a href="../Login/Login.html" style={{ color: "#2190FF" }}>
-              {" "}
-              Login
-            </a>
-          </span>
         </div>
         <div className="signup-form">
           <form onSubmit={handleSubmit}>
@@ -70,13 +102,35 @@ function Sign_Up() {
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
-                  setNameError(""); // Clear any previous error message
+                  setNameError('');
                 }}
                 aria-describedby="helpId"
               />
               {nameError && (
-                <div className="invalid-feedback" style={{ color: "red" }}>
+                <div className="invalid-feedback" style={{ color: 'red' }}>
                   {nameError}
+                </div>
+              )}
+            </div>
+            <div className={`form-group ${emailError ? 'has-error' : ''}`}>
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                required
+                className={`form-control ${emailError ? 'is-invalid' : ''}`}
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setEmailError('');
+                }}
+                aria-describedby="helpId"
+              />
+              {emailError && (
+                <div className="invalid-feedback" style={{ color: 'red' }}>
+                  {emailError}
                 </div>
               )}
             </div>
@@ -92,12 +146,12 @@ function Sign_Up() {
                 value={phoneNumber}
                 onChange={(e) => {
                   setPhoneNumber(e.target.value);
-                  setPhoneError(""); // Clear any previous error message
+                  setPhoneError('');
                 }}
                 aria-describedby="helpId"
               />
               {phoneError && (
-                <div className="invalid-feedback" style={{ color: "red" }}>
+                <div className="invalid-feedback" style={{ color: 'red' }}>
                   {phoneError}
                 </div>
               )}
@@ -114,12 +168,12 @@ function Sign_Up() {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  setPasswordError(""); // Clear any previous error message
+                  setPasswordError('');
                 }}
                 aria-describedby="helpId"
               />
               {passwordError && (
-                <div className="invalid-feedback" style={{ color: "red" }}>
+                <div className="invalid-feedback" style={{ color: 'red' }}>
                   {passwordError}
                 </div>
               )}
@@ -139,6 +193,9 @@ function Sign_Up() {
               </button>
             </div>
           </form>
+          {registrationSuccess && (
+            <div className="success-message">Registration successful!</div>
+          )}
         </div>
       </div>
     </div>
