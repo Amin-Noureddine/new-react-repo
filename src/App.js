@@ -1,10 +1,10 @@
-import './App.css';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Navbar from './Navbar/Navbar';
-import SignUp from './Sign_Up/Sign_Up'; // Corrected import path and component name
-import Login from './Login/Login';
-import LandingPage from './Landing_Page/Landing_Page';
+import Navbar from './Components/Navbar/Navbar';
+import SignUp from './Components/Sign_Up/Sign_Up';
+import Login from './Components/Login/Login';
+import LandingPage from './Components/Landing_Page/Landing_Page';
+import InstantConsultation from './components/InstantConsultationPage';
 
 function App() {
   return (
@@ -15,7 +15,8 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/landingpage" element={<LandingPage />} />
-
+          <Route path="/instant-consultation" element={<InstantConsultation />} />
+          
           {/* Define other routes as needed */}
         </Routes>
       </BrowserRouter>
