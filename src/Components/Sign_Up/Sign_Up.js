@@ -51,7 +51,7 @@ function Sign_Up() {
     // If all validations are successful, you can proceed with form submission
     // Make a POST request to the registration endpoint
     try {
-      const response = await fetch('https://amynalqrby4-8181.theiadockernext-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/auth/register', {
+      const response = await fetch('https://amynalqrby4-8181.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ function Sign_Up() {
           <h1>Sign Up</h1>
         </div>
         <div className="signup-form">
-          <form onSubmit={handleSubmit}>
+          <form method="POST" onSubmit={handleSubmit}>
             <div className={`form-group ${nameError ? 'has-error' : ''}`}>
               <label htmlFor="name">Name</label>
               <input
